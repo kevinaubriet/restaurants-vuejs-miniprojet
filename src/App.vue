@@ -1,11 +1,17 @@
 
 <template>
   <div id="app">
-    <template>
-      <div>
-        <router-view></router-view>
+    <div>
+      <div class="text-xs-center">
+        <v-badge right color="red">
+          <span slot="badge">6</span>
+          <v-btn fab @click="gotoPanier()">
+            <v-icon large color="grey lighten-1">shopping_cart</v-icon>
+          </v-btn>
+        </v-badge>
       </div>
-    </template>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -18,8 +24,17 @@ export default {
   name: "app",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+      msg: "Welcome to Your Vue.js App",
+      nbPanier: 0,
+      elementsPanier: []
     };
+  },
+  methods: {
+    gotoPanier() {
+      this.$router.push({
+        name: "panier"
+      });
+    }
   }
 };
 </script>

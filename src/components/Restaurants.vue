@@ -9,6 +9,8 @@
             <v-layout row wrap>
               <v-flex v-for="n in restaurants.length" :key="`3${n}`" md3>
                 <app-restaurant
+                  v-on:salut="getRestaurantsFromServer()"
+                  :restaurant="restaurants[n-1]"
                   :identifiant="restaurants[n-1]._id"
                   :nomRestaurant="restaurants[n-1].name"
                   :cuisine="restaurants[n-1].cuisine"
@@ -50,13 +52,8 @@ export default {
     getRestaurantsFromServer() {
       console.log("je vais chercher les restaurants");
 
-      let url =
-        "http://localhost:8081/api/restaurants?page=" +
-        this.page +
-        "&pagesize=" +
-        this.pageSize +
-        "&name=" +
-        this.search;
+      let url = "http://localhost:8081/api/restaurants?pages=";
+      this.page + "&pagesize=" + this.pageSize + "&name=" + this.search;
 
       fetch(url, {
         method: "GET"
@@ -78,6 +75,35 @@ export default {
       this.page = 0;
       this.getRestaurantsFromServer();
     }, 300),
+    modifRestaurant() {
+      console.log("je vais modifier un restaurant");
+      this.activeModifDialog = false;
+
+      var formData = new FormData();
+
+      let url = "http://localhost:8080/api/restaurants/" + this.idModif;
+
+      formData.append("nom", this.nomModif);
+      formData.append("cuisine", this.cuisineModif);
+
+      fetch(url, {
+        method: "PUT",
+        body: formData
+      })
+        .then(responseJSON => {
+          return responseJSON.json();
+        })
+        .then(responseJS => {
+          console.log(responseJS.msg);
+          this.apiMessage = responseJS.msg;
+          this.showSnackbar = true;
+          this.getRestaurantsFromServer();
+        })
+        .catch(err => {
+          console.log("une erreur est intervenue");
+        });
+    },
+
     previousPage() {
       if (this.page > 0) {
         this.page--;

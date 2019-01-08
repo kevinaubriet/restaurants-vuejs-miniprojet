@@ -6,6 +6,7 @@ import User from "./components/User.vue";
 import Restaurant from "./components/Restaurant.vue";
 import Restaurants from "./components/Restaurants.vue";
 import RestaurantDetail from "./components/RestaurantDetail.vue";
+import Commande from "./components/Commande.vue";
 
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
@@ -26,7 +27,8 @@ const routes = [
     path: "/restaurant/:id",
     component: RestaurantDetail,
     name: "restaudetail"
-  }
+  },
+  { path: "/panier", component: Commande, name: "panier" }
 ];
 
 const router = new VueRouter({
@@ -38,6 +40,7 @@ const router = new VueRouter({
 Vue.component("app-user", User);
 Vue.component("app-restaurant", Restaurant);
 Vue.component("app-restau-detail", RestaurantDetail);
+Vue.component("app-commande", Commande);
 
 new Vue({
   el: "#app",
