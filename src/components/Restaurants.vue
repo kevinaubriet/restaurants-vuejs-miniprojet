@@ -39,8 +39,6 @@
                   :identifiant="restaurants[n-1]._id"
                   :nomRestaurant="restaurants[n-1].name"
                   :cuisine="restaurants[n-1].cuisine"
-                  :note="calculMoy(restaurants[n-1].grades)"
-                  :nbnotes="restaurants[n-1].grades.length"
                 ></app-restaurant>
               </v-flex>
             </v-layout>
@@ -169,13 +167,6 @@ export default {
       this.page = (this.nb - 1) / this.pageSize;
       this.getRestaurantsFromServer();
       console.log("Dernière page");
-    },
-    calculMoy(tab) {
-      var total = 0;
-      tab.forEach(element => {
-        total = total + parseInt(element.score);
-      });
-      return (total / tab.length / 4).toFixed(2);
     }
   },
 

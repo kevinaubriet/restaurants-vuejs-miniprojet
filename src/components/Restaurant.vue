@@ -32,7 +32,7 @@
             <div class="font-weight-light title mb-2">{{cuisine}}</div>
             <div class="d-flex">
               <v-rating
-                :value="parseFloat(note)"
+                :value="parseFloat(calculMoy(restaurant.grades))"
                 color="amber"
                 dense
                 half-increments
@@ -40,8 +40,8 @@
                 size="14"
               ></v-rating>
               <div class="ml-2 grey--text text--darken-2">
-                <span>{{ note }}</span>
-                <span>({{ nbnotes }})</span>
+                <span>{{ calculMoy(restaurant.grades) }}</span>
+                <span>({{ restaurant.grades.length }})</span>
               </div>
             </div>
           </div>
@@ -93,6 +93,13 @@ export default {
         .catch(err => {
           console.log("une erreur est intervenue");
         });
+    },
+    calculMoy(tab) {
+      var total = 0;
+      tab.forEach(element => {
+        total = total + parseInt(element.score);
+      });
+      return (total / tab.length / 4).toFixed(2);
     }
   },
   components: {
