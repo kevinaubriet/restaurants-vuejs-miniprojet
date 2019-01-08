@@ -23,7 +23,7 @@ const routes = [
   { path: "/", component: Restaurants, name: "restaurants" },
   { path: "/restaurants", component: Restaurants, name: "restaurants" },
   {
-    path: "/restaurant/{:id}",
+    path: "/restaurant/:id",
     component: RestaurantDetail,
     name: "restaudetail"
   }
