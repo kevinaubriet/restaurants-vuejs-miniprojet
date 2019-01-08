@@ -3,18 +3,10 @@
   <div id="app">
     <template>
       <div>
-        Hello {{msg}}
-        <div>
-          <router-link to="/">Home</router-link>
-          <router-link to="/restaurants">Restaurants</router-link>
-        </div>
-
         <router-view></router-view>
       </div>
     </template>
   </div>
-
-  
 </template>
 
 
