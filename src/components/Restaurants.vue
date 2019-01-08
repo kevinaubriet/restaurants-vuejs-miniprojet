@@ -2,6 +2,29 @@
   <div id="user">
     <h3>Listes des restaurants</h3>
 
+    <div>
+      <md-dialog :md-active.sync="activeModifDialog" v-model="valueModifDialog">
+        <md-dialog-title>Modification du restaurant ...</md-dialog-title>
+
+        <md-dialog-content>
+          <md-field>
+            <label>Nom</label>
+            <md-input type="text" v-model="nomModif"></md-input>
+          </md-field>
+          <md-field>
+            <label>Cuisine</label>
+            <md-input type="text" v-model="cuisineModif"></md-input>
+          </md-field>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="activeModifDialog = false">Close</md-button>
+          <md-button type="submit" class="md-primary" @click="modifRestaurant()">Save</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+    </div>
+    <md-snackbar :md-active.sync="snackbar">{{messageSnackBar}}</md-snackbar>
+
     <v-layout>
       <v-flex>
         <v-card>
@@ -9,7 +32,9 @@
             <v-layout row wrap>
               <v-flex v-for="n in restaurants.length" :key="`3${n}`" md3>
                 <app-restaurant
-                  v-on:salut="getRestaurantsFromServer()"
+                  v-on:loadRestaurants="getRestaurantsFromServer()"
+                  v-on:snackbar="showSnackbar($event)"
+                  v-on:modifRestaurant="showActiveDialog($event)"
                   :restaurant="restaurants[n-1]"
                   :identifiant="restaurants[n-1]._id"
                   :nomRestaurant="restaurants[n-1].name"
@@ -39,12 +64,23 @@ export default {
       page: 0,
       pageSize: 10,
       nb: 0,
-      users: []
+      users: [],
+      snackbar: false,
+      activeModifDialog: false,
+      nomModif: "",
+      cuisineModif: "",
+      idModif: "",
+      messageSnackBar: "",
+      valueModifDialog: null
     };
   },
   methods: {
     newUser() {
       window.alert("Noop");
+    },
+    showSnackbar(message) {
+      this.messageSnackBar = message;
+      this.snackbar = true;
     },
     searchOnTable() {
       this.searched = searchByName(this.users, this.search);
@@ -71,17 +107,20 @@ export default {
           console.log("une erreur est intervenue");
         });
     },
-    rechercherRestaurant: _.debounce(function() {
-      this.page = 0;
-      this.getRestaurantsFromServer();
-    }, 300),
+    showActiveDialog(resto) {
+      this.activeModifDialog = true;
+      this.nomModif = resto.name;
+      this.cuisineModif = resto.cuisine;
+      this.idModif = resto._id;
+      console.log(resto.name);
+    },
     modifRestaurant() {
       console.log("je vais modifier un restaurant");
       this.activeModifDialog = false;
 
       var formData = new FormData();
 
-      let url = "http://localhost:8080/api/restaurants/" + this.idModif;
+      let url = "http://localhost:8081/api/restaurants/" + this.idModif;
 
       formData.append("nom", this.nomModif);
       formData.append("cuisine", this.cuisineModif);
@@ -103,7 +142,10 @@ export default {
           console.log("une erreur est intervenue");
         });
     },
-
+    rechercherRestaurant: _.debounce(function() {
+      this.page = 0;
+      this.getRestaurantsFromServer();
+    }, 300),
     previousPage() {
       if (this.page > 0) {
         this.page--;

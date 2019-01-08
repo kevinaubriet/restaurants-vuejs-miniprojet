@@ -16,7 +16,15 @@
 
       <div>
         <v-card-text class="pt-4" style="position: relative;">
-          <v-btn absolute color="orange" class="white--text" fab right top>
+          <v-btn
+            absolute
+            color="orange"
+            class="white--text"
+            fab
+            right
+            top
+            @click="$emit('modifRestaurant',restaurant)"
+          >
             <v-icon>edit</v-icon>
           </v-btn>
           <div>
@@ -52,7 +60,9 @@ export default {
       /*
       userName: "toto",
       */
-      value: 5
+      value: 5,
+      nomModif: "",
+      cuisineModif: ""
     };
   },
   methods: {
@@ -76,9 +86,9 @@ export default {
           return responseJSON.json();
         })
         .then(responseJS => {
-          this.apiMessage = responseJS.msg;
           //this.showSnackbar = true;
-          this.$emit("salut");
+          this.$emit("loadRestaurants");
+          this.$emit("snackbar", responseJS.msg);
         })
         .catch(err => {
           console.log("une erreur est intervenue");
