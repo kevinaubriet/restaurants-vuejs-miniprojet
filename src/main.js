@@ -8,17 +8,14 @@ import Restaurants from "./components/Restaurants.vue";
 import RestaurantDetail from "./components/RestaurantDetail.vue";
 import Commande from "./components/Commande.vue";
 import MenuRestaurant from "./components/MenuRestaurant.vue";
-import DialogModif from "./components/dialogModif.vue";
 
 import Vuetify from "vuetify";
+Vue.use(Vuetify);
 import "vuetify/dist/vuetify.min.css";
 
 import VueMaterial from "vue-material";
-import "vue-material/dist/vue-material.min.css";
-
 Vue.use(VueMaterial);
-
-Vue.use(Vuetify);
+import "vue-material/dist/vue-material.min.css";
 
 Vue.use(VueRouter);
 
@@ -49,7 +46,6 @@ Vue.component("app-restaurant", Restaurant);
 Vue.component("app-restau-detail", RestaurantDetail);
 Vue.component("app-commande", Commande);
 Vue.component("app-menu-restaurant", MenuRestaurant);
-Vue.component("app-dialog", DialogModif);
 
 new Vue({
   el: "#app",

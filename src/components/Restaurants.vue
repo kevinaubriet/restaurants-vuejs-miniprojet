@@ -40,6 +40,21 @@
 
     <md-snackbar :md-active.sync="snackbar">{{messageSnackBar}}</md-snackbar>
 
+    <div>
+      <v-container fluid grid-list-lg>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <v-subheader class="pl-0">Nombre de restaurants affichés</v-subheader>
+            <v-slider
+              persistent-hint
+              thumb-label
+              v-model="pageSize"
+              @input="getRestaurantsFromServer()"
+            ></v-slider>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </div>
     <v-layout>
       <v-flex>
         <v-card>
@@ -59,12 +74,16 @@
             </v-layout>
           </v-container>
         </v-card>
+        <div class="text-center">
+          <v-pagination
+            v-model="(page)"
+            :length="Math.round((this.nb - 1) / this.pageSize,0)-1"
+            :total-visible="7"
+            @input="getRestaurantsFromServer()"
+          ></v-pagination>
+        </div>
       </v-flex>
     </v-layout>
-
-    <div class="text-center">
-      <v-pagination v-model="page" :length="6"></v-pagination>
-    </div>
   </div>
 </template>
 
@@ -79,7 +98,7 @@ export default {
       userName: "toto",
       search: "",
       restaurants: [],
-      page: 0,
+      page: 1,
       pageSize: 10,
       nb: 0,
       users: [],
@@ -96,6 +115,9 @@ export default {
     newUser() {
       window.alert("Noop");
     },
+    test() {
+      console.log(this.pageSize);
+    },
     showSnackbar(message) {
       this.messageSnackBar = message;
       this.snackbar = true;
@@ -105,9 +127,13 @@ export default {
     },
     getRestaurantsFromServer() {
       console.log("je vais chercher les restaurants");
-
-      let url = "http://localhost:8081/api/restaurants?pages=";
-      this.page + "&pagesize=" + this.pageSize + "&name=" + this.search;
+      let url =
+        "http://localhost:8081/api/restaurants?page=" +
+        (this.page - 1) +
+        "&pagesize=" +
+        this.pageSize +
+        "&name=" +
+        this.search;
 
       fetch(url, {
         method: "GET"
@@ -146,6 +172,7 @@ export default {
 
       formData.append("nom", this.nomModif);
       formData.append("cuisine", this.cuisineModif);
+      //formData.append("borough", "salut");
 
       fetch(url, {
         method: "PUT",
@@ -156,11 +183,12 @@ export default {
         })
         .then(responseJS => {
           console.log(responseJS.msg);
+          console.log(responseJS.error);
           this.apiMessage = responseJS.msg;
           this.showSnackbar = true;
         })
         .catch(err => {
-          console.log("une erreur est intervenue");
+          console.log(err);
         });
     },
     rechercherRestaurant: _.debounce(function() {

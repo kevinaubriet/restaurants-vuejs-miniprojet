@@ -15,6 +15,13 @@
           <v-card-actions>
             <v-btn flat @click="gotoMenu()" color="orange">Carte du restaurant</v-btn>
           </v-card-actions>
+          <v-container v-for="n in restaurant.grades.length" :key="`${n}`">
+            <app-elem-grade
+              :date="restaurant.grades[n-1].date"
+              :grade="restaurant.grades[n-1].grade"
+              :score="restaurant.grades[n-1].score"
+            ></app-elem-grade>
+          </v-container>
         </v-card>
       </v-flex>
     </v-layout>
@@ -23,7 +30,7 @@
 
 <script>
 import _ from "lodash";
-
+import ElementGrade from "./ElementGrade";
 export default {
   data() {
     return {
@@ -68,34 +75,10 @@ export default {
   },
   components: {
     // LOCAL COMPONENTS
+    "app-elem-grade": ElementGrade
   }
-};
-
-const toLower = text => {
-  return text.toString().toLowerCase();
-};
-
-const searchByName = (items, term) => {
-  if (term) {
-    return items.filter(item => toLower(item.name).includes(toLower(term)));
-  }
-
-  return items;
 };
 </script>
 
 <style>
-p {
-  font-style: italic;
-  color: red;
-}
-#testbackground {
-  background-color: blue;
-}
-#testbackground2 {
-  background-color: red;
-}
-#testbackground3 {
-  background-color: yellow;
-}
 </style>
