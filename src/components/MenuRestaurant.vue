@@ -1,24 +1,5 @@
 <template>
-  <div id="user">
-    <v-layout>
-      <v-flex>
-        <v-card>
-          <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" aspect-ratio="2.75"></v-img>
-
-          <v-card-title primary-title>
-            <div>
-              <h3 class="headline mb-0">{{restaurant.name}}</h3>
-              <div>{{restaurant.address.building}} {{restaurant.address.street}} à {{restaurant.borough}}</div>
-            </div>
-          </v-card-title>
-
-          <v-card-actions>
-            <v-btn flat @click="gotoMenu()" color="orange">Carte du restaurant</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </div>
+  <div></div>
 </template>
 
 <script>
@@ -31,6 +12,7 @@ export default {
     };
   },
   methods: {
+    getMenu() {},
     getRestaurantFromServer() {
       console.log("je vais chercher le restaurant");
 
@@ -48,14 +30,6 @@ export default {
         .catch(err => {
           console.log("une erreur est intervenue");
         });
-    },
-    gotoMenu() {
-      this.$router.push({
-        name: "menurestaurant",
-        params: {
-          id: this.$route.params.id
-        }
-      });
     }
   },
 

@@ -46,6 +46,9 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <div class="text-xs-center">
+      <v-pagination v-model="page" :length="6"></v-pagination>
+    </div>
   </div>
 </template>
 

@@ -1,12 +1,11 @@
-
 <template>
   <div id="app">
     <div>
       <div class="text-xs-center">
         <v-badge right color="red">
-          <span slot="badge">6</span>
+          <span slot="badge">{{nbPanier}}</span>
           <v-btn fab @click="gotoPanier()">
-            <v-icon large color="grey lighten-1">shopping_cart</v-icon>
+            <v-icon large color="grey lighten-1">shopping_basket</v-icon>
           </v-btn>
         </v-badge>
       </div>
@@ -14,10 +13,6 @@
     </div>
   </div>
 </template>
-
-
-
-
 
 <script>
 export default {

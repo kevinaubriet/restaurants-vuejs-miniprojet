@@ -46,6 +46,9 @@
             </div>
           </div>
         </v-card-text>
+        <div>
+          <v-btn @click="gotoDetail()">Acceder au détail</v-btn>
+        </div>
       </div>
       <v-spacer></v-spacer>
     </v-card>
