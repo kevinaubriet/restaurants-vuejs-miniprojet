@@ -13,15 +13,22 @@
           </v-card-title>
 
           <v-card-actions>
-            <v-btn flat @click="gotoMenu()" color="orange">Carte du restaurant</v-btn>
+            <v-btn round @click="gotoMenu()" color="primary" dark>Consulter la carte du restaurant
+              <v-icon medium>keyboard_arrow_right</v-icon>
+            </v-btn>
           </v-card-actions>
-          <v-container v-for="n in restaurant.grades.length" :key="`${n}`">
-            <app-elem-grade
-              :date="restaurant.grades[n-1].date"
-              :grade="restaurant.grades[n-1].grade"
-              :score="restaurant.grades[n-1].score"
-            ></app-elem-grade>
-          </v-container>
+
+          <v-card-text>Notes:</v-card-text>
+          <v-list two-line>
+            <template v-for="n in restaurant.grades.length">
+              <app-elem-grade
+                :key="n"
+                :date="restaurant.grades[n-1].date"
+                :grade="restaurant.grades[n-1].grade"
+                :score="restaurant.grades[n-1].score"
+              ></app-elem-grade>
+            </template>
+          </v-list>
         </v-card>
       </v-flex>
     </v-layout>

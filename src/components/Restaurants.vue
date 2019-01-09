@@ -1,7 +1,6 @@
 <template>
   <div id="user">
     <h3>Listes des restaurants</h3>
-    <v-img :src="randomImages[0]" aspect-ratio="2.75"></v-img>
     <v-layout row justify-center>
       <v-dialog v-model="activeModifDialog" persistent max-width="600px">
         <v-card>
