@@ -1,16 +1,7 @@
 <template>
   <div id="user">
     <h3>Listes des restaurants</h3>
-    <!--
-    <app-dialog
-      :visible="activeModifDialog"
-      :nom="nomModif"
-      :cuisine="cuisineModif"
-      :identifiant="idModif"
-      v-on:child-hide-event="activeModifDialog=false"
-      v-on:child-modif-event="modifRestaurant()"
-    ></app-dialog>
-    -->
+    <v-img :src="randomImages[0]" aspect-ratio="2.75"></v-img>
     <v-layout row justify-center>
       <v-dialog v-model="activeModifDialog" persistent max-width="600px">
         <v-card>
@@ -69,6 +60,7 @@
                   :identifiant="restaurants[n-1]._id"
                   :nomRestaurant="restaurants[n-1].name"
                   :cuisine="restaurants[n-1].cuisine"
+                  :image="randomImages[n-1]"
                 ></app-restaurant>
               </v-flex>
             </v-layout>
@@ -90,6 +82,7 @@
 <script>
 import Restaurant from "./Restaurant.vue";
 import DialogModif from "./dialogModif.vue";
+import randomImagesApi from "../api/RandomImages.js";
 import _ from "lodash";
 
 export default {
@@ -108,7 +101,9 @@ export default {
       cuisineModif: "",
       idModif: "",
       messageSnackBar: "",
-      valueModifDialog: null
+      valueModifDialog: null,
+      randomImages: [],
+      randomImagesObject: []
     };
   },
   methods: {
@@ -144,12 +139,47 @@ export default {
         .then(responseJS => {
           this.restaurants = responseJS.data;
           this.nb = responseJS.count;
-          console.log(this.restaurants[0].name);
-          console.log(this.restaurants[0].grades);
         })
         .catch(err => {
           console.log("une erreur est intervenue");
         });
+      this.getImagesFromserver();
+    },
+    getImagesFromserver() {
+      randomImagesApi
+        .images("restaurant", this.pageSize)
+        .then(imageResult => {
+          console.log(imageResult);
+          imageResult.data.result.items.forEach(item => {
+            this.randomImages.push(item.media);
+          });
+          console.log(this.randomImages[0]);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getRandomImage() {
+      var random = Math.round(Math.random() * this.randomImages.length);
+      return this.randomImages[random];
+    },
+    loadImages() {
+      var randomImagesCount = 0;
+      var randomImagesCountError = 0;
+      this.randomImages.forEach(item => {
+        var img = new Image();
+        img.onload = () => {
+          //randomImagesCount++;
+          //console.log(randomImagesCount);
+          this.randomImagesObject.push(img);
+        };
+        /*img.onerror = () => {
+          randomImagesCountError++;
+          console.log("Error:" + randomImagesCountError);
+        };*/
+        img.src = item;
+        //this.randomImagesObject.push(img);
+      });
     },
     showActiveDialog(resto) {
       this.activeModifDialog = true;

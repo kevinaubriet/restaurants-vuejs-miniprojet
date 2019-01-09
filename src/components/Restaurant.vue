@@ -8,7 +8,7 @@
       max-width="600"
       height="450"
     >
-      <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/cards/cooking.png">
+      <v-img :aspect-ratio="16/9" :src="image">
         <v-btn block fab small left color="red" @click="supprimerRestaurant()">
           <v-icon color="white">clear</v-icon>
         </v-btn>
@@ -116,7 +116,8 @@ export default {
     "cuisine",
     "typeCuisine",
     "note",
-    "nbnotes"
+    "nbnotes",
+    "image"
   ],
   created() {},
   mounted() {

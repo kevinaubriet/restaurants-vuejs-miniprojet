@@ -2,14 +2,15 @@
   <div id="app">
     <v-app>
       <div>
-        <div class="text-xs-center">
-          <v-badge right color="red">
-            <span slot="badge">{{nbPanier}}</span>
-            <v-btn fab @click="gotoPanier()">
-              <v-icon large color="grey lighten-1">shopping_basket</v-icon>
-            </v-btn>
-          </v-badge>
-        </div>
+        <v-badge right color="red">
+          <span top right slot="badge">{{nbPanier}}</span>
+          <v-btn fixed top right fab @click="gotoPanier()">
+            <v-icon large color="grey lighten-1">shopping_basket</v-icon>
+          </v-btn>
+        </v-badge>
+      </div>
+
+      <div>
         <router-view></router-view>
       </div>
     </v-app>
