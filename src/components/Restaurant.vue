@@ -74,7 +74,8 @@ export default {
       this.$router.push({
         name: "restaudetail",
         params: {
-          id: this.identifiant
+          id: this.identifiant,
+          imagerestaurant: this.image
         }
       });
       console.log(this.identifiant);

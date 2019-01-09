@@ -3,7 +3,7 @@
     <v-layout>
       <v-flex>
         <v-card>
-          <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" aspect-ratio="2.75"></v-img>
+          <v-img :src="this.$route.params.imagerestaurant" aspect-ratio="2.75"></v-img>
 
           <v-card-title primary-title>
             <div>
@@ -40,7 +40,6 @@ export default {
   methods: {
     getRestaurantFromServer() {
       console.log("je vais chercher le restaurant");
-
       let url =
         "http://localhost:8081/api/restaurants/" + this.$route.params.id;
       fetch(url, {
