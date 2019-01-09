@@ -41,7 +41,7 @@
               ></v-rating>
               <div class="ml-2 grey--text text--darken-2">
                 <span>{{ calculMoy(restaurant.grades) }}</span>
-                <span>({{ restaurant.grades.length }})</span>
+                <span>({{ restaurant.grades.length}})</span>
               </div>
             </div>
           </div>
@@ -50,13 +50,14 @@
           <v-btn @click="gotoDetail()">Acceder au détail</v-btn>
         </div>
       </div>
+
       <v-spacer></v-spacer>
     </v-card>
   </v-hover>
 </template>
 
 <script>
-//import RestaurantsVue from "./Restaurants.vue";
+//restaurant.grades.length
 export default {
   data() {
     return {

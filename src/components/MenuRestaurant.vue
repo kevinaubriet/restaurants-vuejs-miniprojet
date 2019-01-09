@@ -1,5 +1,8 @@
 <template>
-  <div></div>
+  <div>
+    <v-btn color="primary" dark @click="dialog = true">Open Dialog</v-btn>
+    <app-dialog :visible="dialog" v-on:child-hide-event="dialog=false"></app-dialog>
+  </div>
 </template>
 
 <script>
@@ -8,7 +11,7 @@ import _ from "lodash";
 export default {
   data() {
     return {
-      restaurant: ""
+      dialog: false
     };
   },
   methods: {

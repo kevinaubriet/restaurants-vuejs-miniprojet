@@ -1,28 +1,43 @@
 <template>
   <div id="user">
     <h3>Listes des restaurants</h3>
+    <!--
+    <app-dialog
+      :visible="activeModifDialog"
+      :nom="nomModif"
+      :cuisine="cuisineModif"
+      :identifiant="idModif"
+      v-on:child-hide-event="activeModifDialog=false"
+      v-on:child-modif-event="modifRestaurant()"
+    ></app-dialog>
+    -->
+    <v-layout row justify-center>
+      <v-dialog v-model="activeModifDialog" persistent max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Modification du restaurant</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field label="Nom" v-model="nomModif"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Cuisine" v-model="cuisineModif"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="activeModifDialog=false">Close</v-btn>
+            <v-btn color="blue darken-1" flat @click="modifierRestaurant()">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
 
-    <div>
-      <md-dialog :md-active.sync="activeModifDialog" v-model="valueModifDialog">
-        <md-dialog-title>Modification du restaurant ...</md-dialog-title>
-
-        <md-dialog-content>
-          <md-field>
-            <label>Nom</label>
-            <md-input type="text" v-model="nomModif"></md-input>
-          </md-field>
-          <md-field>
-            <label>Cuisine</label>
-            <md-input type="text" v-model="cuisineModif"></md-input>
-          </md-field>
-        </md-dialog-content>
-
-        <md-dialog-actions>
-          <md-button class="md-primary" @click="activeModifDialog = false">Close</md-button>
-          <md-button type="submit" class="md-primary" @click="modifRestaurant()">Save</md-button>
-        </md-dialog-actions>
-      </md-dialog>
-    </div>
     <md-snackbar :md-active.sync="snackbar">{{messageSnackBar}}</md-snackbar>
 
     <v-layout>
@@ -46,7 +61,8 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <div class="text-xs-center">
+
+    <div class="text-center">
       <v-pagination v-model="page" :length="6"></v-pagination>
     </div>
   </div>
@@ -54,6 +70,7 @@
 
 <script>
 import Restaurant from "./Restaurant.vue";
+import DialogModif from "./dialogModif.vue";
 import _ from "lodash";
 
 export default {
@@ -115,8 +132,12 @@ export default {
       this.idModif = resto._id;
       console.log(resto.name);
     },
-    modifRestaurant() {
+    modifierRestaurant(restaurant) {
       console.log("je vais modifier un restaurant");
+      console.log(this.idModif);
+      console.log(this.nomModif);
+      console.log(this.cuisineModif);
+
       this.activeModifDialog = false;
 
       var formData = new FormData();
@@ -137,7 +158,6 @@ export default {
           console.log(responseJS.msg);
           this.apiMessage = responseJS.msg;
           this.showSnackbar = true;
-          this.getRestaurantsFromServer();
         })
         .catch(err => {
           console.log("une erreur est intervenue");
@@ -182,7 +202,8 @@ export default {
   },
   components: {
     // LOCAL COMPONENTS
-    "app-restaurant": Restaurant
+    "app-restaurant": Restaurant,
+    "app-dialog": DialogModif
   }
 };
 
