@@ -1,229 +1,91 @@
 <template>
   <div>
-    <div id="app" class="container">
-      <div class="text-right">
-        <button
-          class="btn btn-primary"
-          data-toggle="modal"
-          data-target="#cartModal"
-        >Cart ({{cartItems.length}})</button>
-      </div>
-
-      <!-- Modal -->
-      <div
-        class="modal fade"
-        id="cartModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="myModalLabel"
-      >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <h4 class="modal-title" id="myModalLabel">Cart</h4>
-            </div>
-            <div class="modal-body">
-              <shopping-cart inline-template :items="cartItems">
-                <div>
-                  <table class="table table-cart">
-                    <tr v-for="(item, index) in items" :key="`${item}`">
-                      <td>{{item.title}}</td>
-                      <td style="width:120px">
-                        QTY:
-                        <input v-model="item.qty" class="form-control input-qty" type="number">
-                      </td>
-                      <td class="text-right">${{item.price | formatCurrency}}</td>
-                      <td>
-                        <button @click="removeItem(index)">
-                          <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr v-show="items.length === 0">
-                      <td colspan="4" class="text-center">Cart is empty</td>
-                    </tr>
-                    <tr v-show="items.length > 0">
-                      <td></td>
-                      <td class="text-right">Cart Total</td>
-                      <td class="text-right">${{Total | formatCurrency}}</td>
-                      <td></td>
-                    </tr>
-                  </table>
-                </div>
-                <!-- /.container -->
-              </shopping-cart>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-3 text-center" v-for="item in items" :key="`${item}`">
-            <img class="img-responsive" :src="item.image" alt>
-            <h5>{{ item.title }}</h5>
-            <h6>${{ item.price | formatCurrency }}</h6>
-            <p class="text-center">
-              <input
-                v-model="item.qty"
-                type="number"
-                class="form-control"
-                placeholder="Qty"
-                min="1"
-              >
-            </p>
-
-            <button @click="addToCart(item)" class="btn btn-sm btn-primary">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <template>
+      <v-parallax dark src="https://cdn.vuetifyjs.com/images/cards/cooking.png">
+        <v-layout align-center column justify-center>
+          <h1 class="display-2 font-weight-thin mb-3">Menu</h1>
+          <h4 class="subheading">{{this.restaurant.name}}</h4>
+        </v-layout>
+      </v-parallax>
+    </template>
+    <app-entree-menu></app-entree-menu>
+    <v-spacer></v-spacer>
+    <app-plat-menu></app-plat-menu>
+    <v-spacer></v-spacer>
+    <app-dessert-menu></app-dessert-menu>
   </div>
 </template>
 
 <script>
-/*
-var products = [
-  {
-    id: 1,
-    title: "Macbook Pro",
-    price: 2500.0,
-    qty: 1,
-    image: "http://lorempixel.com/150/150/"
-  },
-  {
-    id: 2,
-    title: "Asus ROG Gaming",
-    price: 1000.0,
-    qty: 1,
-    image: "http://lorempixel.com/150/150/"
-  },
-  {
-    id: 3,
-    title: "Amazon Kindle",
-    price: 150.0,
-    qty: 1,
-    image: "http://lorempixel.com/150/150/"
-  },
-  {
-    id: 4,
-    title: "Another Product",
-    price: 10,
-    qty: 1,
-    image: "http://lorempixel.com/150/150/"
-  }
-];
-
-function formatNumber(n, c, d, t) {
-  var c = isNaN((c = Math.abs(c))) ? 2 : c,
-    d = d === undefined ? "." : d,
-    t = t === undefined ? "," : t,
-    s = n < 0 ? "-" : "",
-    i = String(parseInt((n = Math.abs(Number(n) || 0).toFixed(c)))),
-    j = (j = i.length) > 3 ? j % 3 : 0;
-  return (
-    s +
-    (j ? i.substr(0, j) + t : "") +
-    i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) +
-    (c
-      ? d +
-        Math.abs(n - i)
-          .toFixed(c)
-          .slice(2)
-      : "")
-  );
-}
-
+import EntreeMenu from "./EntreeMenu";
+import PlatMenu from "./EntreeMenu";
+import DessertMenu from "./EntreeMenu";
 export default {
   data() {
     return {
-      /*
-      userName: "toto",
-      
-      value: 5,
-      nomModif: "",
-      cuisineModif: ""
+      restaurant: "",
+      categories: []
     };
   },
-  methods: {},
-  filter: {},
-  components: { "app-restaurant": Restaurant }
+  methods: {
+    getRestaurantFromServer() {
+      console.log("je vais chercher le restaurant");
+      let url =
+        "http://localhost:8081/api/restaurants/" + this.$route.params.id;
+      fetch(url, {
+        method: "GET"
+      })
+        .then(responseJSON => {
+          return responseJSON.json();
+        })
+        .then(responseJS => {
+          this.restaurant = responseJS.restaurant;
+        })
+        .catch(err => {
+          console.log("une erreur est intervenue");
+        });
+    },
+    getCategoriesFromApi() {
+      console.log("je vais chercher le restaurant");
+      let url = "https://www.themealdb.com/api/json/v1/1/list.php?c=list";
+
+      fetch(url, {
+        method: "POST"
+      })
+        .then(responseJSON => {
+          return responseJSON.json();
+        })
+        .then(responseJS => {
+          return responseJS.meals;
+        })
+        .then(responseCate => {
+          responseCate.forEach(element => {
+            this.categories.push(element.strCategory);
+          });
+        })
+        .catch(err => {
+          console.log("une erreur est intervenue");
+        });
+    }
+  },
+  mounted() {
+    //console.log("AVANT AFFICHAGE")
+    this.getRestaurantFromServer();
+    this.getCategoriesFromApi();
+  },
+  components: {
+    "app-entree-menu": EntreeMenu,
+    "app-plat-menu": PlatMenu,
+    "app-dessert-menu": DessertMenu
+  }
 };
-
-Vue.filter("formatCurrency", function(value) {
-  return formatNumber(value, 2, ".", ",");
-});
-
-Vue.component("shopping-cart", {
-  props: ["items"],
-
-  computed: {
-    Total: function() {
-      var total = 0;
-      this.items.forEach(item => {
-        total += item.price * item.qty;
-      });
-      return total;
-    }
-  },
-
-  methods: {
-    removeItem(index) {
-      this.items.splice(index, 1);
-    }
-  }
-});
-
-const vm = new Vue({
-  el: "#app",
-
-  data: {
-    cartItems: [],
-    items: products
-  },
-
-  methods: {
-    addToCart(itemToAdd) {
-      var found = false;
-
-      // Check if the item was already added to cart
-      // If so them add it to the qty field
-      this.cartItems.forEach(item => {
-        if (item.id === itemToAdd.id) {
-          found = true;
-          item.qty += itemToAdd.qty;
-        }
-      });
-
-      if (found === false) {
-        this.cartItems.push(Vue.util.extend({}, itemToAdd));
-      }
-
-      itemToAdd.qty = 1;
-    }
-  }
-});
-*/
 </script>
 
 <style>
-.container {
-  padding: 20px;
-  max-width: 600px;
+#test {
+  background: blue;
 }
-
-.input-qty {
-  width: 60px;
-  float: right;
-}
-
-.table-cart > tr > td {
-  vertical-align: middle !important;
+.parallax {
+  min-height: 380px;
 }
 </style>

@@ -72,9 +72,7 @@ export default {
     }
   },
 
-  created() {
-    this.restaurants = this.users;
-  },
+  created() {},
   mounted() {
     //console.log("AVANT AFFICHAGE")
     this.getRestaurantFromServer();
