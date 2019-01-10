@@ -1,6 +1,7 @@
 <template>
   <div id="user">
     <h3>Listes des restaurants</h3>
+
     <v-layout row justify-center>
       <v-dialog v-model="activeModifDialog" persistent max-width="600px">
         <v-card>
@@ -39,15 +40,25 @@
               persistent-hint
               thumb-label
               v-model="pageSize"
-              @input="getRestaurantsFromServer()"
+              @input="rechercherRestaurant()"
             ></v-slider>
           </v-flex>
         </v-layout>
       </v-container>
     </div>
+
     <v-layout>
       <v-flex>
         <v-card>
+          <v-card-title>
+            <v-text-field
+              solo
+              v-model="search"
+              @input="rechercherRestaurant()"
+              label="Rechercher un restaurant ..."
+              append-icon="search"
+            ></v-text-field>
+          </v-card-title>
           <v-container v-bind="{ [`grid-list-xl`]: true }" fluid>
             <v-layout row wrap>
               <v-flex v-for="n in restaurants.length" :key="`3${n}`" md3>
@@ -59,7 +70,7 @@
                   :identifiant="restaurants[n-1]._id"
                   :nomRestaurant="restaurants[n-1].name"
                   :cuisine="restaurants[n-1].cuisine"
-                  :image="randomImages[n-1]"
+                  :image="getRandomImage()"
                 ></app-restaurant>
               </v-flex>
             </v-layout>
@@ -101,8 +112,7 @@ export default {
       idModif: "",
       messageSnackBar: "",
       valueModifDialog: null,
-      randomImages: [],
-      randomImagesObject: []
+      tableauImages: []
     };
   },
   methods: {
@@ -142,43 +152,23 @@ export default {
         .catch(err => {
           console.log("une erreur est intervenue");
         });
-      this.getImagesFromserver();
+      //this.getImagesFromserver();
     },
     getImagesFromserver() {
       randomImagesApi
-        .images("restaurant", this.pageSize)
+        .images("restaurant", 50)
         .then(imageResult => {
-          console.log(imageResult);
           imageResult.data.result.items.forEach(item => {
-            this.randomImages.push(item.media);
+            this.tableauImages.push(item.media);
           });
-          console.log(this.randomImages[0]);
         })
         .catch(err => {
           console.log(err);
         });
     },
     getRandomImage() {
-      var random = Math.round(Math.random() * this.randomImages.length);
-      return this.randomImages[random];
-    },
-    loadImages() {
-      var randomImagesCount = 0;
-      var randomImagesCountError = 0;
-      this.randomImages.forEach(item => {
-        var img = new Image();
-        img.onload = () => {
-          //randomImagesCount++;
-          //console.log(randomImagesCount);
-          this.randomImagesObject.push(img);
-        };
-        /*img.onerror = () => {
-          randomImagesCountError++;
-          console.log("Error:" + randomImagesCountError);
-        };*/
-        img.src = item;
-        //this.randomImagesObject.push(img);
-      });
+      var random = Math.round(Math.random() * this.tableauImages.length);
+      return this.tableauImages[random];
     },
     showActiveDialog(resto) {
       this.activeModifDialog = true;
@@ -189,9 +179,6 @@ export default {
     },
     modifierRestaurant(restaurant) {
       console.log("je vais modifier un restaurant");
-      console.log(this.idModif);
-      console.log(this.nomModif);
-      console.log(this.cuisineModif);
 
       this.activeModifDialog = false;
 
@@ -221,7 +208,7 @@ export default {
         });
     },
     rechercherRestaurant: _.debounce(function() {
-      this.page = 0;
+      this.page = 1;
       this.getRestaurantsFromServer();
     }, 300),
     previousPage() {

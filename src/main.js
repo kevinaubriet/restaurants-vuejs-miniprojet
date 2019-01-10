@@ -16,7 +16,12 @@ import VueMaterial from "vue-material";
 Vue.use(VueMaterial);
 import "vue-material/dist/vue-material.min.css";
 
+import VueLodash from "vue-lodash";
+
 Vue.use(VueRouter);
+
+const options = { name: "_" };
+Vue.use(VueLodash, options);
 
 const routes = [
   { path: "/", component: Restaurants, name: "restaurants" },
