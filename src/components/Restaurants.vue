@@ -12,10 +12,10 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="Nom" v-model="nomModif"></v-text-field>
+                  <v-text-field label="Nom" v-model="restaurantModif.nom"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Cuisine" v-model="cuisineModif"></v-text-field>
+                  <v-text-field label="Cuisine" v-model="restaurantModif.cuisine"></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -50,7 +50,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click="activeAddDialog=false">Close</v-btn>
-            <v-btn color="blue darken-1" flat @click="ajoutRestaurant()">Ajouter</v-btn>
+            <v-btn color="blue darken-1" flat @click="ajouterRestaurant()">Ajouter</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -93,15 +93,12 @@
           </div>
           <v-container v-bind="{ [`grid-list-xl`]: true }" fluid>
             <v-layout row wrap>
-              <v-flex v-for="n in restaurants.length" :key="`3${n}`" md3>
+              <v-flex v-for="n in (restaurants.length)" :key="`3${n}`" md3>
                 <app-restaurant
                   v-on:loadRestaurants="getRestaurantsFromServer()"
                   v-on:snackbar="showSnackbar($event)"
                   v-on:modifRestaurant="showActiveDialog($event)"
                   :restaurant="restaurants[n-1]"
-                  :identifiant="restaurants[n-1]._id"
-                  :nomRestaurant="restaurants[n-1].name"
-                  :cuisine="restaurants[n-1].cuisine"
                   :image="getRandomImage()"
                 ></app-restaurant>
               </v-flex>
@@ -111,7 +108,7 @@
         <div class="text-center">
           <v-pagination
             v-model="(page)"
-            :length="Math.round((this.nb - 1) / this.pageSize,0)-1"
+            :length="Math.round((this.nb - 1) / this.pageSize,0)"
             :total-visible="7"
             @input="getRestaurantsFromServer()"
           ></v-pagination>
@@ -134,18 +131,18 @@ export default {
         nom: "",
         cuisine: ""
       },
-      userName: "toto",
+      restaurantModif: {
+        nom: "",
+        cuisine: "",
+        id: ""
+      },
       search: "",
       restaurants: [],
       page: 1,
       pageSize: 10,
       nb: 0,
-      users: [],
       snackbar: false,
       activeModifDialog: false,
-      nomModif: "",
-      cuisineModif: "",
-      idModif: "",
       messageSnackBar: "",
       valueModifDialog: null,
       activeAddDialog: null,
@@ -162,9 +159,6 @@ export default {
     showSnackbar(message) {
       this.messageSnackBar = message;
       this.snackbar = true;
-    },
-    searchOnTable() {
-      this.searched = searchByName(this.users, this.search);
     },
     getRestaurantsFromServer() {
       console.log("je vais chercher les restaurants");
@@ -209,22 +203,23 @@ export default {
     },
     showActiveDialog(resto) {
       this.activeModifDialog = true;
-      this.nomModif = resto.name;
-      this.cuisineModif = resto.cuisine;
-      this.idModif = resto._id;
+      this.restaurantModif.nom = resto.name;
+      this.restaurantModif.cuisine = resto.cuisine;
+      this.restaurantModif.id = resto._id;
       console.log(resto.name);
     },
-    modifierRestaurant(restaurant) {
+    modifierRestaurant() {
       console.log("je vais modifier un restaurant");
 
       this.activeModifDialog = false;
 
       var formData = new FormData();
 
-      let url = "http://localhost:8081/api/restaurants/" + this.idModif;
+      let url =
+        "http://localhost:8081/api/restaurants/" + this.restaurantModif.id;
 
-      formData.append("nom", this.nomModif);
-      formData.append("cuisine", this.cuisineModif);
+      formData.append("nom", this.restaurantModif.nom);
+      formData.append("cuisine", this.restaurantModif.cuisine);
 
       fetch(url, {
         method: "PUT",
@@ -235,48 +230,53 @@ export default {
         })
         .then(responseJS => {
           console.log(responseJS.msg);
-          console.log(responseJS.error);
           this.apiMessage = responseJS.msg;
           this.showSnackbar = true;
+          this.getRestaurantsFromServer();
         })
         .catch(err => {
           console.log(err);
         });
     },
-    ajoutRestaurant() {},
+    ajouterRestaurant() {
+      console.log("je vais ajouter un restaurant");
+
+      this.activeAddDialog = false;
+      var formDataA = new FormData();
+
+      let url = "http://localhost:8081/api/restaurants";
+
+      formDataA.append("nom", this.restaurantAdd.nom);
+      formDataA.append("cuisine", this.restaurantAdd.cuisine);
+
+      console.log("je vais ajouter un restaurant");
+      fetch(url, {
+        method: "POST",
+        body: formDataA
+      })
+        .then(responseJSON => {
+          return responseJSON.json();
+        })
+        .then(responseJS => {
+          this.apiMessage = responseJS.msg;
+          this.showSnackbar = true;
+          this.restaurantAdd.nom = "";
+          this.restaurantAdd.cuisine = "";
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     rechercherRestaurant: _.debounce(function() {
       this.page = 1;
       this.getRestaurantsFromServer();
-    }, 300),
-    previousPage() {
-      if (this.page > 0) {
-        this.page--;
-        this.getRestaurantsFromServer();
-      }
-      console.log("Précédant");
-    },
-    nextPage() {
-      if (this.page < (this.nb - 1) / this.pageSize) {
-        this.page++;
-        this.getRestaurantsFromServer();
-      }
-      console.log("Suivant");
-    },
-    firstPage() {
-      this.page = 0;
-      this.getRestaurantsFromServer();
-      console.log("Première page");
-    },
-    lastPage() {
-      this.page = (this.nb - 1) / this.pageSize;
-      this.getRestaurantsFromServer();
-      console.log("Dernière page");
-    }
+      console.log(this.restaurants.length);
+      console.log(this.restaurants);
+      console.log(this.restaurants[0].name);
+    }, 300)
   },
 
-  created() {
-    this.restaurants = this.users;
-  },
+  created() {},
   mounted() {
     //console.log("AVANT AFFICHAGE")
     this.getRestaurantsFromServer();

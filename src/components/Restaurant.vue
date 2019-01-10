@@ -28,8 +28,8 @@
             <v-icon>edit</v-icon>
           </v-btn>
           <div>
-            <h3 class="display-1 font-weight-light orange--text mb-2">{{nomRestaurant}}</h3>
-            <div class="font-weight-light title mb-2">{{cuisine}}</div>
+            <h3 class="display-1 font-weight-light orange--text mb-2">{{restaurant.name}}</h3>
+            <div class="font-weight-light title mb-2">{{restaurant.cuisine}}</div>
             <div class="d-flex">
               <v-rating
                 :value="parseFloat(calculMoy(restaurant.grades))"
@@ -74,11 +74,11 @@ export default {
       this.$router.push({
         name: "restaudetail",
         params: {
-          id: this.identifiant,
+          id: this.restaurant._id,
           imagerestaurant: this.image
         }
       });
-      console.log(this.identifiant);
+      console.log(this.restaurant._id);
     },
     supprimerRestaurant() {
       console.log("je vais supprimer un restaurant");
@@ -110,16 +110,7 @@ export default {
   components: {
     // LOCAL COMPONENTS
   },
-  props: [
-    "restaurant",
-    "identifiant",
-    "nomRestaurant",
-    "cuisine",
-    "typeCuisine",
-    "note",
-    "nbnotes",
-    "image"
-  ],
+  props: ["restaurant", "note", "nbnotes", "image"],
   created() {},
   mounted() {
     //console.log("AVANT AFFICHAGE")

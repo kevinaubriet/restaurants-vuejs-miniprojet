@@ -27,7 +27,8 @@ export default {
       categories: [],
       entrees: [],
       plats: [],
-      desserts: []
+      desserts: [],
+      elementPanier: { str: "", src: "", id: "", nb: 0, prix: 0 }
     };
   },
   methods: {
@@ -91,8 +92,32 @@ export default {
         });
     },
     addToPanier(elem) {
-      this.$tabPanier.push(elem);
+      var dansPanier = false;
+      this.$tabPanier.forEach(function(element) {
+        if (element.idMeal == elem.id) {
+          element.nb += 1;
+          dansPanier == true;
+        }
+      });
+      if (!dansPanier) {
+        this.$tabPanier.push({
+          str: elem.strMeal,
+          src: elem.strMealThumb,
+          id: elem.idMeal,
+          nb: 1
+        });
+      }
+
       console.log(this.$tabPanier.length);
+    },
+    isInPanier(id) {
+      var isIn = false;
+      this.$tabPanier.forEach(function(element) {
+        if (element.idMeal == id) {
+          isIn = true;
+        }
+      });
+      return isIn;
     }
   },
 

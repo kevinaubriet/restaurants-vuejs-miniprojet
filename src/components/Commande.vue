@@ -6,7 +6,8 @@
         <v-icon light>cached</v-icon>
       </span>
     </v-btn>
-    <h3>{{$tabPanier[0].strMeal}}</h3>
+    <h3>{{$tabPanier[0].str}}</h3>
+    <h3>{{$tabPanier[0].nb}}</h3>
   </div>
 </template>
 
