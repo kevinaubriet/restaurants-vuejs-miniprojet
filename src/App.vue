@@ -1,15 +1,20 @@
 <template>
   <div id="app">
     <v-app>
-      <div>
-        <v-btn fixed top right fab @click="gotoPanier()">
-          <v-icon large color="grey lighten-1">shopping_basket</v-icon>
-        </v-btn>
-      </div>
+      <v-toolbar>
+        <v-toolbar-title>{{$route.name}}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn v-if="$route.name != 'panier'" top fab @click="gotoPanier()">
+            <v-icon large color="grey lighten-1">shopping_basket</v-icon>
+          </v-btn>
+          <v-btn top fab @click="gotoHome()">
+            <v-icon large color="grey lighten-1">home</v-icon>
+          </v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
 
-      <div>
-        <router-view></router-view>
-      </div>
+      <router-view></router-view>
     </v-app>
   </div>
 </template>
@@ -28,6 +33,11 @@ export default {
     gotoPanier() {
       this.$router.push({
         name: "panier"
+      });
+    },
+    gotoHome() {
+      this.$router.push({
+        name: "restaurants"
       });
     }
   }

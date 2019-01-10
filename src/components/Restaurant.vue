@@ -46,12 +46,12 @@
             </div>
           </div>
         </v-card-text>
-        <div>
-          <v-btn @click="gotoDetail()">Acceder au détail</v-btn>
-        </div>
       </div>
 
       <v-spacer></v-spacer>
+      <div>
+        <v-btn @click="gotoDetail()">Acceder au détail</v-btn>
+      </div>
     </v-card>
   </v-hover>
 </template>

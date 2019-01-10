@@ -29,6 +29,33 @@
       </v-dialog>
     </v-layout>
 
+    <v-layout row justify-center>
+      <v-dialog v-model="activeAddDialog" persistent max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Ajout d'un restaurant</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field label="Nom" v-model="restaurantAdd.nom"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Cuisine" v-model="restaurantAdd.cuisine"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="activeAddDialog=false">Close</v-btn>
+            <v-btn color="blue darken-1" flat @click="ajoutRestaurant()">Ajouter</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
+
     <md-snackbar :md-active.sync="snackbar">{{messageSnackBar}}</md-snackbar>
 
     <div>
@@ -59,6 +86,11 @@
               append-icon="search"
             ></v-text-field>
           </v-card-title>
+          <div class="text-xs-center">
+            <v-btn id="btnadd" round color="green" dark @click="activeAddDialog=true">
+              <v-icon>add</v-icon>
+            </v-btn>
+          </div>
           <v-container v-bind="{ [`grid-list-xl`]: true }" fluid>
             <v-layout row wrap>
               <v-flex v-for="n in restaurants.length" :key="`3${n}`" md3>
@@ -98,6 +130,10 @@ import _ from "lodash";
 export default {
   data() {
     return {
+      restaurantAdd: {
+        nom: "",
+        cuisine: ""
+      },
       userName: "toto",
       search: "",
       restaurants: [],
@@ -112,6 +148,7 @@ export default {
       idModif: "",
       messageSnackBar: "",
       valueModifDialog: null,
+      activeAddDialog: null,
       tableauImages: []
     };
   },
@@ -188,7 +225,6 @@ export default {
 
       formData.append("nom", this.nomModif);
       formData.append("cuisine", this.cuisineModif);
-      //formData.append("borough", "salut");
 
       fetch(url, {
         method: "PUT",
@@ -207,6 +243,7 @@ export default {
           console.log(err);
         });
     },
+    ajoutRestaurant() {},
     rechercherRestaurant: _.debounce(function() {
       this.page = 1;
       this.getRestaurantsFromServer();
@@ -277,5 +314,8 @@ p {
 }
 #testbackground3 {
   background-color: yellow;
+}
+#btnadd {
+  width: 90%;
 }
 </style>
