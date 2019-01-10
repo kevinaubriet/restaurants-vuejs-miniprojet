@@ -2,7 +2,6 @@ import Vue from "vue";
 import App from "./App.vue";
 
 import VueRouter from "vue-router";
-import User from "./components/User.vue";
 import Restaurant from "./components/Restaurant.vue";
 import Restaurants from "./components/Restaurants.vue";
 import RestaurantDetail from "./components/RestaurantDetail.vue";
@@ -41,11 +40,12 @@ const router = new VueRouter({
   mode: "history"
 });
 
-Vue.component("app-user", User);
 Vue.component("app-restaurant", Restaurant);
 Vue.component("app-restau-detail", RestaurantDetail);
 Vue.component("app-commande", Commande);
 Vue.component("app-menu-restaurant", MenuRestaurant);
+
+Vue.prototype.$tabPanier = [];
 
 new Vue({
   el: "#app",

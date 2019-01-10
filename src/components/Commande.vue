@@ -6,6 +6,7 @@
         <v-icon light>cached</v-icon>
       </span>
     </v-btn>
+    <h3>{{$tabPanier[0].strMeal}}</h3>
   </div>
 </template>
 
@@ -25,7 +26,8 @@ export default {
   methods: {
     commander() {
       console.log("commande passée");
-    }
+    },
+    getPanier() {}
   },
   watch: {
     loader() {

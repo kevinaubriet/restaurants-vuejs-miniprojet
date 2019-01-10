@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>salut</h3>
+    <h3>{{this.dessertsProp[0].strMeal}}</h3>
   </div>
 </template>
 
@@ -12,7 +12,8 @@ export default {
     };
   },
   methods: {},
-  components: {}
+  components: {},
+  props: ["dessertsProp"]
 };
 </script>
 

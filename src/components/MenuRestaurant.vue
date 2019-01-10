@@ -8,23 +8,26 @@
         </v-layout>
       </v-parallax>
     </template>
-    <app-entree-menu></app-entree-menu>
+    <app-entree-menu :entreesProp="this.entrees"></app-entree-menu>
     <v-spacer></v-spacer>
-    <app-plat-menu></app-plat-menu>
+    <app-plat-menu :platsProp="this.plats" v-on:addToPanier="addToPanier($event)"></app-plat-menu>
     <v-spacer></v-spacer>
-    <app-dessert-menu></app-dessert-menu>
+    <app-dessert-menu :dessertsProp="this.desserts"></app-dessert-menu>
   </div>
 </template>
 
 <script>
 import EntreeMenu from "./EntreeMenu";
-import PlatMenu from "./EntreeMenu";
-import DessertMenu from "./EntreeMenu";
+import PlatMenu from "./PlatMenu";
+import DessertMenu from "./DessertMenu";
 export default {
   data() {
     return {
       restaurant: "",
-      categories: []
+      categories: [],
+      entrees: [],
+      plats: [],
+      desserts: []
     };
   },
   methods: {
@@ -66,12 +69,46 @@ export default {
         .catch(err => {
           console.log("une erreur est intervenue");
         });
+    },
+    getElemFromCategories(category, callback) {
+      console.log("je vais chercher le restaurant");
+      var listOfCate;
+      let url =
+        "https://www.themealdb.com/api/json/v1/1/filter.php?c=" + category;
+
+      fetch(url, {
+        method: "POST"
+      })
+        .then(responseJSON => {
+          return responseJSON.json();
+        })
+        .then(responseJS => {
+          listOfCate = responseJS.meals;
+          callback(listOfCate);
+        })
+        .catch(err => {
+          console.log("une erreur est intervenue");
+        });
+    },
+    addToPanier(elem) {
+      this.$tabPanier.push(elem);
+      console.log(this.$tabPanier.length);
     }
   },
+
   mounted() {
     //console.log("AVANT AFFICHAGE")
     this.getRestaurantFromServer();
     this.getCategoriesFromApi();
+    this.getElemFromCategories("Starter", tab => {
+      this.entrees = tab;
+    });
+    this.getElemFromCategories("Pasta", tab => {
+      this.plats = tab;
+    });
+    this.getElemFromCategories("Desert", tab => {
+      this.desserts = tab;
+    });
   },
   components: {
     "app-entree-menu": EntreeMenu,

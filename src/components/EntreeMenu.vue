@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-layout></v-layout>
+    <v-layout>
+      <h2>{{this.entreesProp[0].strMeal}}</h2>
+    </v-layout>
   </div>
 </template>
 
@@ -9,14 +11,15 @@ export default {
   data() {
     return {
       categories: "",
-      category: ""
+      category: "Starter",
+      tabEntree: []
     };
   },
   methods: {
     getEntreeFromApi() {
       console.log("je vais chercher le restaurant");
       let url =
-        "https://www.themealdb.com/api/json/v1/1/filter.php?c=" + category;
+        "https://www.themealdb.com/api/json/v1/1/filter.php?c=" + this.category;
 
       fetch(url, {
         method: "POST"
@@ -26,10 +29,7 @@ export default {
           return responseJSON.json();
         })
         .then(responseJS => {
-          return responseJS.meals;
-        })
-        .then(responseCate => {
-          categories;
+          this.tabEntree = responseJS.meals;
         })
         .catch(err => {
           console.log("une erreur est intervenue");
@@ -39,7 +39,8 @@ export default {
   components: {},
   mounted() {
     //this.getEntreeFromApi();
-  }
+  },
+  props: ["entreesProp"]
 };
 </script>
 
