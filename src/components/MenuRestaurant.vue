@@ -16,10 +16,54 @@
   </div>
 </template>
 
+
 <script>
 import EntreeMenu from "./EntreeMenu";
 import PlatMenu from "./PlatMenu";
 import DessertMenu from "./DessertMenu";
+import _ from "lodash";
+
+var json = {
+  meals: [
+    {
+      strMeal: "Chilli prawn linguine",
+      strMealThumb:
+        "https://www.themealdb.com/images/media/meals/usywpp1511189717.jpg",
+      idMeal: "52839"
+    },
+    {
+      strMeal: "Fettucine alfredo",
+      strMealThumb:
+        "https://www.themealdb.com/images/media/meals/uquqtu1511178042.jpg",
+      idMeal: "52835"
+    },
+    {
+      strMeal: "Grilled Mac and Cheese Sandwich",
+      strMealThumb:
+        "https://www.themealdb.com/images/media/meals/xutquv1505330523.jpg",
+      idMeal: "52829"
+    },
+    {
+      strMeal: "Lasagne",
+      strMealThumb:
+        "https://www.themealdb.com/images/media/meals/wtsvxx1511296896.jpg",
+      idMeal: "52844"
+    },
+    {
+      strMeal: "Pilchard puttanesca",
+      strMealThumb:
+        "https://www.themealdb.com/images/media/meals/vvtvtr1511180578.jpg",
+      idMeal: "52837"
+    },
+    {
+      strMeal: "Venetian Duck Ragu",
+      strMealThumb:
+        "https://www.themealdb.com/images/media/meals/qvrwpt1511181864.jpg",
+      idMeal: "52838"
+    }
+  ]
+};
+
 export default {
   data() {
     return {
@@ -91,6 +135,34 @@ export default {
           console.log("une erreur est intervenue");
         });
     },
+    getJson() {
+      return json.meals;
+    },
+    random2elem(tab) {
+      var tab2 = [];
+      console.log("salut");
+      console.log(tab.length);
+
+      var element1 = tab[this._.random(tab.length - 1)];
+      var element2 = tab[this._.random(tab.length - 1)];
+
+      tab2.push({
+        str: element1.strMeal,
+        src: element1.strMealThumb,
+        id: element1.idMeal,
+        nb: 1,
+        prix: this._.random(16)
+      });
+      tab2.push({
+        str: element2.strMeal,
+        src: element2.strMealThumb,
+        id: element2.idMeal,
+        nb: 1,
+        prix: this._.random(16)
+      });
+
+      return tab2;
+    },
     addToPanier(elem) {
       var dansPanier = false;
       this.$tabPanier.forEach(function(element) {
@@ -100,12 +172,7 @@ export default {
         }
       });
       if (!dansPanier) {
-        this.$tabPanier.push({
-          str: elem.strMeal,
-          src: elem.strMealThumb,
-          id: elem.idMeal,
-          nb: 1
-        });
+        this.$tabPanier.push(elem);
       }
 
       console.log(this.$tabPanier.length);
@@ -124,16 +191,24 @@ export default {
   mounted() {
     //console.log("AVANT AFFICHAGE")
     this.getRestaurantFromServer();
+
+    var tab = this.getJson();
+    this.entrees = this.random2elem(tab);
+
+    /*
     this.getCategoriesFromApi();
     this.getElemFromCategories("Starter", tab => {
-      this.entrees = tab;
+      console.log(tab.length);
+      this.entrees = random2elem(tab);
+      console.log(this.entrees);
     });
     this.getElemFromCategories("Pasta", tab => {
-      this.plats = tab;
+      this.plats = random2elem(tab);
     });
     this.getElemFromCategories("Desert", tab => {
-      this.desserts = tab;
+      this.desserts = random2elem(tab);
     });
+    */
   },
   components: {
     "app-entree-menu": EntreeMenu,
