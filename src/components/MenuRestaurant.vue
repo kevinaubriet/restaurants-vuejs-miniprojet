@@ -8,9 +8,9 @@
         </v-layout>
       </v-parallax>
     </template>
-    <app-entree-menu :entreesProp="this.entrees"></app-entree-menu>
+    <app-entree-menu :entreesProp="this.entrees" v-on:addPanier="addToPanier($event)"></app-entree-menu>
     <v-spacer></v-spacer>
-    <app-plat-menu :platsProp="this.plats" v-on:addToPanier="addToPanier($event)"></app-plat-menu>
+    <app-plat-menu :platsProp="this.plats" v-on:addPanier="addToPanier($event)"></app-plat-menu>
     <v-spacer></v-spacer>
     <app-dessert-menu :dessertsProp="this.desserts"></app-dessert-menu>
   </div>
@@ -140,8 +140,6 @@ export default {
     },
     random2elem(tab) {
       var tab2 = [];
-      console.log("salut");
-      console.log(tab.length);
 
       var element1 = tab[this._.random(tab.length - 1)];
       var element2 = tab[this._.random(tab.length - 1)];
@@ -164,11 +162,15 @@ export default {
       return tab2;
     },
     addToPanier(elem) {
+      console.log("je vais ajouter au panier");
+
       var dansPanier = false;
       this.$tabPanier.forEach(function(element) {
-        if (element.idMeal == elem.id) {
+        if (element.id == elem.id) {
           element.nb += 1;
-          dansPanier == true;
+          dansPanier = true;
+        } else {
+          console.log("pas dans panier");
         }
       });
       if (!dansPanier) {
@@ -176,15 +178,6 @@ export default {
       }
 
       console.log(this.$tabPanier.length);
-    },
-    isInPanier(id) {
-      var isIn = false;
-      this.$tabPanier.forEach(function(element) {
-        if (element.idMeal == id) {
-          isIn = true;
-        }
-      });
-      return isIn;
     }
   },
 

@@ -24,7 +24,7 @@
                   large
                   right
                   top
-                  @click="$emit('addToPanier',entreesProp[n-1])"
+                  @click="$emit('addPanier',entreesProp[n-1])"
                 >
                   <v-icon>shopping_cart</v-icon>
                 </v-btn>
@@ -54,31 +54,7 @@ export default {
       tabEntree: []
     };
   },
-  methods: {
-    randomEntree() {
-      console.log("salut");
-      console.log(this.entreesProp.length);
-      /*
-      var entree1 = this.entreesProp[this._.random(this.entreesProp.length)];
-      var entree2 = this.entreesProp[this._.random(this.entreesProp.length)];
-
-      this.tabEntree.push({
-        str: entree1.strMeal,
-        src: entree1.strMealThumb,
-        id: entree1.idMeal,
-        nb: 1,
-        prix: this._.random(12)
-      });
-      this.tabEntree.push({
-        str: entree2.strMeal,
-        src: entree2.strMealThumb,
-        id: entree2.idMeal,
-        nb: 1,
-        prix: this._.random(12)
-      });
-      */
-    }
-  },
+  methods: {},
   components: {},
   mounted() {
     //this.getEntreeFromApi();
