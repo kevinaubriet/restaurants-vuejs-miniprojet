@@ -93,12 +93,12 @@
           </div>
           <v-container v-bind="{ [`grid-list-xl`]: true }" fluid>
             <v-layout row wrap>
-              <v-flex v-for="n in (restaurants.length)" :key="`3${n}`" md3>
+              <v-flex v-for="(restaurantof,index) in restaurants" :key="index" md3>
                 <app-restaurant
                   v-on:loadRestaurants="getRestaurantsFromServer()"
                   v-on:snackbar="showSnackbar($event)"
                   v-on:modifRestaurant="showActiveDialog($event)"
-                  :restaurant="restaurants[n-1]"
+                  :restaurant="restaurantof"
                   :image="getRandomImage()"
                 ></app-restaurant>
               </v-flex>
@@ -183,7 +183,7 @@ export default {
         .catch(err => {
           console.log("une erreur est intervenue");
         });
-      this.getImagesFromserver();
+      //this.getImagesFromserver();
     },
     getImagesFromserver() {
       randomImagesApi

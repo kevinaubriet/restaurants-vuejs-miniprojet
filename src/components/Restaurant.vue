@@ -1,59 +1,61 @@
 <template>
-  <v-hover>
-    <v-card
-      slot-scope="{ hover }"
-      :class="`elevation-${hover ? 12 : 2}`"
-      class="mx-auto"
-      color="grey lighten-4"
-      max-width="600"
-      height="450"
-    >
-      <v-img :aspect-ratio="16/9" :src="image">
-        <v-btn block fab small left color="red" @click="supprimerRestaurant()">
-          <v-icon color="white">clear</v-icon>
-        </v-btn>
-      </v-img>
-
-      <div>
-        <v-card-text class="pt-4" style="position: relative;">
-          <v-btn
-            absolute
-            color="orange"
-            class="white--text"
-            fab
-            right
-            top
-            @click="$emit('modifRestaurant',restaurant)"
-          >
-            <v-icon>edit</v-icon>
+  <div>
+    <v-hover>
+      <v-card
+        slot-scope="{ hover }"
+        :class="`elevation-${hover ? 12 : 2}`"
+        class="mx-auto"
+        color="grey lighten-4"
+        max-width="600"
+        height="450"
+      >
+        <v-img :aspect-ratio="16/9" :src="image">
+          <v-btn block fab small left color="red" @click="supprimerRestaurant()">
+            <v-icon color="white">clear</v-icon>
           </v-btn>
-          <div>
-            <h3 class="display-1 font-weight-light orange--text mb-2">{{restaurant.name}}</h3>
-            <div class="font-weight-light title mb-2">{{restaurant.cuisine}}</div>
-            <div class="d-flex">
-              <v-rating
-                :value="parseFloat(calculMoy(restaurant.grades))"
-                color="amber"
-                dense
-                half-increments
-                readonly
-                size="14"
-              ></v-rating>
-              <div class="ml-2 grey--text text--darken-2">
-                <span>{{ calculMoy(restaurant.grades) }}</span>
-                <span>({{ restaurant.grades.length}})</span>
+        </v-img>
+
+        <div>
+          <v-card-text class="pt-4" style="position: relative;">
+            <v-btn
+              absolute
+              color="orange"
+              class="white--text"
+              fab
+              right
+              top
+              @click="$emit('modifRestaurant',restaurant)"
+            >
+              <v-icon>edit</v-icon>
+            </v-btn>
+            <div>
+              <h3 class="display-1 font-weight-light orange--text mb-2">{{restaurant.name}}</h3>
+              <div class="font-weight-light title mb-2">{{restaurant.cuisine}}</div>
+              <div v-if=" restaurant.grades != null" class="d-flex">
+                <v-rating
+                  :value="parseFloat(calculMoy(restaurant.grades))"
+                  color="amber"
+                  dense
+                  half-increments
+                  readonly
+                  size="14"
+                ></v-rating>
+                <div class="ml-2 grey--text text--darken-2">
+                  <span>{{ calculMoy(restaurant.grades) }}</span>
+                  <span>({{ restaurant.grades.length}})</span>
+                </div>
               </div>
             </div>
-          </div>
-        </v-card-text>
-      </div>
+          </v-card-text>
+        </div>
 
-      <v-spacer></v-spacer>
-      <div>
-        <v-btn @click="gotoDetail()">Acceder au détail</v-btn>
-      </div>
-    </v-card>
-  </v-hover>
+        <v-spacer></v-spacer>
+        <div>
+          <v-btn @click="gotoDetail()">Acceder au détail</v-btn>
+        </div>
+      </v-card>
+    </v-hover>
+  </div>
 </template>
 
 <script>

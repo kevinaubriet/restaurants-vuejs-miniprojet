@@ -1,21 +1,50 @@
 <template>
   <div id="user">
-    <v-container v-for="n in ($tabPanier.length)" :key="`${n}`">
-      <h3>{{$tabPanier[n-1].str}}</h3>
-      <h3>x {{$tabPanier[n-1].nb}}</h3>
-      <h3>prix unitaire : {{$tabPanier[n-1].prix}}</h3>
-      <h3>prix groupé : {{$tabPanier[n-1].prix*$tabPanier[n-1].nb}}</h3>
+    <h3 v-if="$tabPanier.length == 0">Votre panier est vide</h3>
+    <v-container v-for="(article,index) in $tabPanier" :key="index">
+      <v-card>
+        <v-container grid-list-md text-xs-center>
+          <v-layout row wrap>
+            <v-flex xs4>
+              <v-img :src="article.src"></v-img>
+            </v-flex>
+            <v-flex xs8>
+              <v-card id="fils" dark color="primary">
+                <h3>{{article.str}}</h3>
+                <h3>x {{article.nb}}</h3>
+                <h3>prix unitaire : {{article.prix}} €</h3>
+                <h3>prix groupé : {{(article.prix)*(article.nb)}} €</h3>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+
       <v-spacer></v-spacer>
     </v-container>
-
-    <h1>{{totalpanier}}</h1>
-
-    <v-btn :loading="loading4" :disabled="loading4" color="info" @click="loader = 'loading4'">
-      Commander
-      <span slot="loader" class="custom-loader">
-        <v-icon light>cached</v-icon>
-      </span>
-    </v-btn>
+    <div v-if="$tabPanier.length != 0">
+      <v-card>
+        <v-card-title>
+          <v-container text-large-center>
+            <h1>Total de la commande : {{totalpanier}} €</h1>
+          </v-container>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn
+            block
+            :loading="loading4"
+            :disabled="loading4"
+            color="info"
+            @click="loader = 'loading4'"
+          >
+            Commander
+            <span slot="loader" class="custom-loader">
+              <v-icon light>cached</v-icon>
+            </span>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </div>
   </div>
 </template>
 
@@ -36,9 +65,13 @@ export default {
   methods: {
     commander() {
       console.log("commande passée");
+      this.$tabPanier.length = 0;
+      this.getTotalPanier();
     },
     getPanier() {},
     getTotalPanier() {
+      console.log("je calcule le total");
+      console.log(this.$tabPanier.length);
       this.$tabPanier.forEach(element => {
         this.totalpanier = this.totalpanier + element.nb * element.prix;
       });
@@ -85,6 +118,10 @@ p {
   font-style: italic;
   color: red;
 }
+#fils {
+  height: 100%;
+  width: 100%;
+}
 #testbackground {
   background-color: blue;
 }
@@ -98,6 +135,7 @@ p {
   animation: loader 1s infinite;
   display: flex;
 }
+
 @-moz-keyframes loader {
   from {
     transform: rotate(0);
