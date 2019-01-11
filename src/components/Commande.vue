@@ -11,7 +11,7 @@
     <h1>{{totalpanier}}</h1>
 
     <v-btn :loading="loading4" :disabled="loading4" color="info" @click="loader = 'loading4'">
-      Icon Loader
+      Commander
       <span slot="loader" class="custom-loader">
         <v-icon light>cached</v-icon>
       </span>
