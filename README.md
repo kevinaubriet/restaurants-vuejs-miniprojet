@@ -15,7 +15,7 @@ npm run dev
 npm run build
 ```
 
-Nous avons utilisé un server custom pour modifier la requette de modification (l'ancienne requette, lors de la modification, supprimait tous autres champs que le nom et la cuisine). Nous n'avons pas utilisé de nouvelle base.
+Nous avons utilisé un server custom pour modifier la requette de modification (l'ancienne requette, lors de la modification, supprimait tout autre champ que le nom et la cuisine). Nous n'avons pas utilisé de nouvelle base.
 
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
