@@ -17,6 +17,7 @@
     "vue-lodash": "^2.0.0",
     "vue-material": "^1.0.0-beta-10.2",
     "vue-router": "^3.0.2",
+    "vue2-leaflet": "^1.2.3",
     "vuetify": "^1.4.1"
   },
   "browserslist": [

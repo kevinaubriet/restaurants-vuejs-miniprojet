@@ -1,14 +1,12 @@
 <template>
   <div>
-    <!--
-      <v-parallax dark src="https://cdn.vuetifyjs.com/images/cards/cooking.png">
-        <v-layout align-center column justify-center>
-          <h1 class="display-2 font-weight-thin mb-3">Menu</h1>
-          <h4 class="subheading">{{this.restaurant.name}}</h4>
-        </v-layout>
-      </v-parallax>
-    -->
-    <v-img></v-img>
+    <v-parallax dark src="https://cdn.vuetifyjs.com/images/cards/cooking.png">
+      <v-layout align-center column justify-center>
+        <h1 class="display-2 font-weight-thin mb-3">Menu</h1>
+        <h4 class="subheading">{{this.restaurant.name}}</h4>
+      </v-layout>
+    </v-parallax>
+
     <app-entree-menu :entreesProp="this.entrees" v-on:addPanier="addToPanier($event)"></app-entree-menu>
     <v-spacer></v-spacer>
     <app-plat-menu :platsProp="this.plats" v-on:addPanier="addToPanier($event)"></app-plat-menu>
@@ -24,6 +22,7 @@ import PlatMenu from "./PlatMenu";
 import DessertMenu from "./DessertMenu";
 import _ from "lodash";
 
+/*
 var jsonEntree = {
   meals: [
     {
@@ -378,7 +377,7 @@ var jsonDessert = {
       idMeal: "52917"
     }
   ]
-};
+};*/
 
 export default {
   data() {
@@ -431,8 +430,8 @@ export default {
           console.log("une erreur est intervenue");
         });
     },
-    getElemFromCategories(category, callback) {
-      console.log("je vais chercher le restaurant");
+    getElemFromCategories(category) {
+      console.log("je vais chercher les elemnts de la categorie");
       var listOfCate;
       let url =
         "https://www.themealdb.com/api/json/v1/1/filter.php?c=" + category;
@@ -445,7 +444,13 @@ export default {
         })
         .then(responseJS => {
           listOfCate = responseJS.meals;
-          callback(listOfCate);
+          if (category == "Starter") {
+            this.entrees = this.random2elem(listOfCate);
+          } else if (category == "Pasta") {
+            this.plats = this.random2elem(listOfCate);
+          } else if (category == "Desert") {
+            this.desserts = this.random2elem(listOfCate);
+          }
         })
         .catch(err => {
           console.log("une erreur est intervenue");
@@ -501,24 +506,17 @@ export default {
     //console.log("AVANT AFFICHAGE")
     this.getRestaurantFromServer();
 
+    /*
     this.entrees = this.random2elem(this.getJson(jsonEntree));
     this.plats = this.random2elem(this.getJson(jsonPlat));
     this.desserts = this.random2elem(this.getJson(jsonDessert));
+*/
 
-    /*
     this.getCategoriesFromApi();
-    this.getElemFromCategories("Starter", tab => {
-      console.log(tab.length);
-      this.entrees = random2elem(tab);
-      console.log(this.entrees);
-    });
-    this.getElemFromCategories("Pasta", tab => {
-      this.plats = random2elem(tab);
-    });
-    this.getElemFromCategories("Desert", tab => {
-      this.desserts = random2elem(tab);
-    });
-    */
+
+    this.getElemFromCategories("Starter");
+    this.getElemFromCategories("Pasta");
+    this.getElemFromCategories("Desert");
   },
   components: {
     "app-entree-menu": EntreeMenu,
@@ -531,8 +529,5 @@ export default {
 <style>
 #test {
   background: blue;
-}
-.parallax {
-  min-height: 380px;
 }
 </style>

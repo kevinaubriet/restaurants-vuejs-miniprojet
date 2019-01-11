@@ -5,10 +5,10 @@
         <v-toolbar-title>{{$route.name}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
-          <v-btn v-if="$route.name != 'panier'" top fab @click="gotoPanier()">
+          <v-btn v-if="$route.name != 'panier'" fab @click="gotoPanier()">
             <v-icon large color="grey lighten-1">shopping_basket</v-icon>
           </v-btn>
-          <v-btn top fab @click="gotoHome()">
+          <v-btn fab @click="gotoHome()">
             <v-icon large color="grey lighten-1">home</v-icon>
           </v-btn>
         </v-toolbar-items>
