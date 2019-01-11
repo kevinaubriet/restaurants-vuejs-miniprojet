@@ -13,9 +13,12 @@
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
-
       <router-view></router-view>
     </v-app>
+    <v-footer class="pa-3">
+      <v-spacer></v-spacer>
+      <div>&copy; Kevin AUBRIET et Habiba BOUAJLA</div>
+    </v-footer>
   </div>
 </template>
 
