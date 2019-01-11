@@ -1,13 +1,21 @@
 <template>
   <div id="user">
+    <v-container v-for="n in ($tabPanier.length)" :key="`${n}`">
+      <h3>{{$tabPanier[n-1].str}}</h3>
+      <h3>x {{$tabPanier[n-1].nb}}</h3>
+      <h3>prix unitaire : {{$tabPanier[n-1].prix}}</h3>
+      <h3>prix groupé : {{$tabPanier[n-1].prix*$tabPanier[n-1].nb}}</h3>
+      <v-spacer></v-spacer>
+    </v-container>
+
+    <h1>{{totalpanier}}</h1>
+
     <v-btn :loading="loading4" :disabled="loading4" color="info" @click="loader = 'loading4'">
       Icon Loader
       <span slot="loader" class="custom-loader">
         <v-icon light>cached</v-icon>
       </span>
     </v-btn>
-    <h3>{{$tabPanier[0].str}}</h3>
-    <h3>{{$tabPanier[0].nb}}</h3>
   </div>
 </template>
 
@@ -17,6 +25,7 @@ import _ from "lodash";
 export default {
   data() {
     return {
+      totalpanier: 0,
       loader: null,
       loading: false,
       loading2: false,
@@ -28,7 +37,12 @@ export default {
     commander() {
       console.log("commande passée");
     },
-    getPanier() {}
+    getPanier() {},
+    getTotalPanier() {
+      this.$tabPanier.forEach(element => {
+        this.totalpanier = this.totalpanier + element.nb * element.prix;
+      });
+    }
   },
   watch: {
     loader() {
@@ -43,11 +57,10 @@ export default {
       this.loader = null;
     }
   },
-  created() {
-    this.restaurants = this.users;
-  },
+  created() {},
   mounted() {
     //console.log("AVANT AFFICHAGE")
+    this.getTotalPanier();
   },
   components: {
     // LOCAL COMPONENTS

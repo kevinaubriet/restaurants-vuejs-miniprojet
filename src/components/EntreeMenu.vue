@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import _ from "lodash";
 export default {
   data() {
     return {
@@ -56,10 +55,7 @@ export default {
   },
   methods: {},
   components: {},
-  mounted() {
-    //this.getEntreeFromApi();
-    //this.randomEntree();
-  },
+  mounted() {},
   props: ["entreesProp"]
 };
 </script>

@@ -12,7 +12,7 @@
     <v-spacer></v-spacer>
     <app-plat-menu :platsProp="this.plats" v-on:addPanier="addToPanier($event)"></app-plat-menu>
     <v-spacer></v-spacer>
-    <app-dessert-menu :dessertsProp="this.desserts"></app-dessert-menu>
+    <app-dessert-menu :dessertsProp="this.desserts" v-on:addPanier="addToPanier($event)"></app-dessert-menu>
   </div>
 </template>
 
@@ -186,7 +186,10 @@ export default {
     this.getRestaurantFromServer();
 
     var tab = this.getJson();
+
     this.entrees = this.random2elem(tab);
+    this.plats = this.random2elem(tab);
+    this.desserts = this.random2elem(tab);
 
     /*
     this.getCategoriesFromApi();
