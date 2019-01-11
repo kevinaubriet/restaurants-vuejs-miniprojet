@@ -1,5 +1,20 @@
 <template>
-  <div id="user">
+  <div>
+    <v-layout row justify-center>
+      <v-dialog v-model="dialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">Commande terminé</v-card-title>
+
+          <v-card-text>Votre commande a été réalisé avec succes</v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn color="green darken-1" flat="flat" @click="dialog = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
     <h3 v-if="$tabPanier.length == 0">Votre panier est vide</h3>
     <v-container v-for="(article,index) in $tabPanier" :key="index">
       <app-article-commande :article="article" v-on:loadPanier="getTotalPanier()"></app-article-commande>
@@ -44,12 +59,14 @@ export default {
       loading: false,
       loading2: false,
       loading3: false,
-      loading4: false
+      loading4: false,
+      dialog: false
     };
   },
   methods: {
     commander() {
       console.log("commande passée");
+      this.dialog = true;
       this.$tabPanier.length = 0;
       this.getTotalPanier();
     },
