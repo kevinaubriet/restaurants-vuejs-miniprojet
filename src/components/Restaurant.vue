@@ -75,7 +75,8 @@ export default {
         name: "restaudetail",
         params: {
           id: this.restaurant._id,
-          imagerestaurant: this.image
+          imagerestaurant: this.image,
+          restaurantFromList: this.restaurant
         }
       });
       console.log(this.restaurant._id);
