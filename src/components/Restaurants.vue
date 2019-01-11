@@ -183,7 +183,7 @@ export default {
         .catch(err => {
           console.log("une erreur est intervenue");
         });
-      //this.getImagesFromserver();
+      this.getImagesFromserver();
     },
     getImagesFromserver() {
       randomImagesApi
