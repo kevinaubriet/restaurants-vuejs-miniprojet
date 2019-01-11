@@ -2,23 +2,7 @@
   <div id="user">
     <h3 v-if="$tabPanier.length == 0">Votre panier est vide</h3>
     <v-container v-for="(article,index) in $tabPanier" :key="index">
-      <v-card>
-        <v-container grid-list-md text-xs-center>
-          <v-layout row wrap>
-            <v-flex xs4>
-              <v-img :src="article.src"></v-img>
-            </v-flex>
-            <v-flex xs8>
-              <v-card id="fils" dark color="primary">
-                <h3>{{article.str}}</h3>
-                <h3>x {{article.nb}}</h3>
-                <h3>prix unitaire : {{article.prix}} €</h3>
-                <h3>prix groupé : {{(article.prix)*(article.nb)}} €</h3>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
+      <app-article-commande :article="article" v-on:loadPanier="getTotalPanier()"></app-article-commande>
 
       <v-spacer></v-spacer>
     </v-container>
@@ -50,6 +34,7 @@
 
 <script>
 import _ from "lodash";
+import Article from "./ArticleCommande.vue";
 
 export default {
   data() {
@@ -71,10 +56,11 @@ export default {
     getPanier() {},
     getTotalPanier() {
       console.log("je calcule le total");
-      console.log(this.$tabPanier.length);
+      this.totalpanier = 0;
       this.$tabPanier.forEach(element => {
         this.totalpanier = this.totalpanier + element.nb * element.prix;
       });
+      //console.log(this.totalpanier);
     }
   },
   watch: {
@@ -97,19 +83,8 @@ export default {
   },
   components: {
     // LOCAL COMPONENTS
+    "app-article-commande": Article
   }
-};
-
-const toLower = text => {
-  return text.toString().toLowerCase();
-};
-
-const searchByName = (items, term) => {
-  if (term) {
-    return items.filter(item => toLower(item.name).includes(toLower(term)));
-  }
-
-  return items;
 };
 </script>
 
